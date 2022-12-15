@@ -71,8 +71,8 @@ include_once  "head.php";
                                 <td><?php echo $row["_count"]; ?></td>
                                 <td>
                                     <a href="group-participants.php?groupid=<?php echo $row['id'] ?>" class="uk-icon-link uk-margin-small-right" uk-icon="info"></a>
-                                    <a href="#" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
-                                    <a href="#" class="uk-icon-link" uk-icon="trash"></a>
+                                    <!-- <a href="#" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
+                                    <a href="#" class="uk-icon-link" uk-icon="trash"></a> -->
                                 </td>
                             </tr>
                         <?php endwhile; ?>

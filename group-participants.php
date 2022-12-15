@@ -77,8 +77,8 @@ $rows1 = $result->fetch_assoc();
                                 <td><?php echo $row["phone"]; ?></td>
                                 <td><?php echo $row["email"]; ?></td>
                                 <td>
-                                    <a href="#" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
-                                    <a href="#" class="uk-icon-link" uk-icon="trash"></a>
+                                    <a href="#" onclick="onUpdateUser(<?php echo $row['id']; ?>)" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
+                                    <a href="#" onclick="onDeleteClick(<?php echo $row['id']; ?>)" class="uk-icon-link" uk-icon="trash"></a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -105,6 +105,32 @@ $rows1 = $result->fetch_assoc();
                     <div class="col-12 mb-2">
                         <label for="email" class="control-label">Email</label>
                         <input type="text" name="email" id="email" class="uk-input">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <button class="uk-button uk-button-primary">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-update-participant" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body uk-padding-small">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <form action="pages/update-participants.form.php" method="POST" id="add-group-form">
+                <input type="hidden" name="groupid" value="<?php echo $_GET['groupid']; ?>">
+                <input type="hidden" name="update-id" id="update-id" value="">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label for="update-name" class="control-label">Name</label>
+                        <input type="text" name="update-name" id="update-name" class="uk-input">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="update-number" class="control-label">Phone number</label>
+                        <input type="text" name="update-number" id="update-number" class="uk-input">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="update-email" class="control-label">Email</label>
+                        <input type="text" name="update-email" id="update-email" class="uk-input">
                     </div>
                     <div class="col-12 mb-2">
                         <button class="uk-button uk-button-primary">Add</button>
@@ -173,14 +199,49 @@ $rows1 = $result->fetch_assoc();
                     parts.forEach((item, ndx) => {
                         $("#drawn").append("<tr><td>" + item.name + "</td><td>" + e[ndx].name + "</td><tr>");
                     })
-                    localStorage.setItem("senders",JSON.stringify(parts))
-                    localStorage.setItem("recievers",JSON.stringify(e))
+                    localStorage.setItem("senders", JSON.stringify(parts))
+                    localStorage.setItem("recievers", JSON.stringify(e))
                     UIkit.modal($("#modal-drawn-participant")).show();
                 }
             })
         }
-        function saveToDb(){
-            UIkit.modal($("#modal-drawn-participant")).show();
+
+        function saveToDb() {
+            UIkit.modal($("#modal-drawn-participant")).hide();
+        }
+
+        function onDeleteClick(userGroupId) {
+            if(confirm("Do you really want to delete?"))
+            {
+                deleteUser(userGroupId);
+            }
+            // UIkit.modal.confirm("Do you really want to delete?").show().then(x => {
+               
+            // }, rejected => {}).catch(x => {})
+        }
+        function deleteUser(id){
+            var url = "pages/delete-user.php?groupid=" + id;
+                $.ajax({
+                    url,
+                    method: "GET",
+                    success: function(e) {
+                        window.location.reload();
+                    }
+                })
+        }
+        function onUpdateUser(id){
+            $.ajax({
+                url:"pages/get-group-user.php?id="+id,
+                method:"GET",
+                success:function(e){
+                    debugger
+                    $("#update-id").val(e[0].id);
+                    $("#update-name").val(e[0].name);
+                    $("#update-number").val(e[0].phone);
+                    $("#update-email").val(e[0].email);
+                    UIkit.modal($("#modal-update-participant")).show();
+                }
+            })
         }
     </script>
 </body>
