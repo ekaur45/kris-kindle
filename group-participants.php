@@ -67,7 +67,8 @@ $rows1 = $result->fetch_assoc();
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone number</th>
-                            <th>Action</th>
+                            <th class="text-center">Is Exluded?</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,7 +77,13 @@ $rows1 = $result->fetch_assoc();
                                 <td><?php echo $row["name"]; ?></td>
                                 <td><?php echo $row["phone"]; ?></td>
                                 <td><?php echo $row["email"]; ?></td>
-                                <td>
+                                <td class="text-center"><?php echo $row["exluded"]==1?'Yes':'No'; ?></td>
+                                <td class="text-center">
+                                    <?php if($row["exluded"]==1):?>
+                                        <a href="#" onclick="onInludeUser(<?php echo $row['id']; ?>)" class="uk-icon-link uk-margin-small-right" uk-icon="plus-circle"></a>
+                                    <?php else:?>
+                                    <a href="#" onclick="onExludeUser(<?php echo $row['id']; ?>)" class="uk-icon-link uk-margin-small-right" uk-icon="minus-circle"></a>
+                                    <?php endif; ?>
                                     <a href="#" onclick="onUpdateUser(<?php echo $row['id']; ?>)" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
                                     <a href="#" onclick="onDeleteClick(<?php echo $row['id']; ?>)" class="uk-icon-link" uk-icon="trash"></a>
                                 </td>
@@ -240,6 +247,24 @@ $rows1 = $result->fetch_assoc();
                     $("#update-number").val(e[0].phone);
                     $("#update-email").val(e[0].email);
                     UIkit.modal($("#modal-update-participant")).show();
+                }
+            })
+        }
+        function onExludeUser(id){
+            $.ajax({
+                url:'pages/exlude-user.php?id='+id,
+                method:"GET",
+                success:function(){
+                    window.location.reload();
+                }
+            })
+        }
+        function onInludeUser(id){
+            $.ajax({
+                url:'pages/inlude-user.php?id='+id,
+                method:"GET",
+                success:function(){
+                    window.location.reload();
                 }
             })
         }

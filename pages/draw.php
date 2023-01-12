@@ -1,7 +1,7 @@
 <?php
 include_once "../inc/db/connection.php";
 $id = $_GET["groupid"];
-$result = $conn->query("select * from group_user where groupid = ".$id);
+$result = $conn->query("select * from group_user where groupid = ".$id." and ifnull(exluded,0)=0");
 $rows = [];
 while($row = $result->fetch_object())
 {
